@@ -19,4 +19,12 @@
     <sql id="Base_Column_List">
         id, no, name, password, age, sex, phone, role_id, isValid
     </sql>
+
+    <select id="pageC" resultType="com.example.entity.User">
+        select * from user
+    </select>
+
+    <select id="pageCC" resultType="com.example.entity.User">
+        select * from user ${ew.customSqlSegment}
+    </select>
 </mapper>

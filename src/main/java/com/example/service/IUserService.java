@@ -1,5 +1,7 @@
 package com.example.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.entity.User;
 
@@ -14,4 +16,7 @@ import com.example.entity.User;
 
 public interface IUserService extends IService<User> {
 
+    IPage pageC(IPage<User> page);
+
+    IPage pageCC(IPage<User> page, Wrapper wrapper);
 }

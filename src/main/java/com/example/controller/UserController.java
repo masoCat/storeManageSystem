@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.common.QuaryPageParam;
+import com.example.common.Result;
 import com.example.entity.User;
 import com.example.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class UserController {
     @PostMapping("/listPage")
     public List<User> listPage(@RequestBody QuaryPageParam query) {
         HashMap param = query.getParam();
-        String name = (String)param.get("name");
+        String name = (String) param.get("name");
 
         Page<User> page = new Page();
         page.setCurrent(query.getPageNum());
@@ -76,8 +77,64 @@ public class UserController {
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.like(User::getName, name);
 
-        IPage result = userService.page(page,lambdaQueryWrapper);
+        IPage result = userService.page(page, lambdaQueryWrapper);
+
+        System.out.println("总页数：" + result.getTotal());
 
         return result.getRecords();
+    }
+
+    @PostMapping("/listPageC")
+    public List<User> listPageC(@RequestBody QuaryPageParam query) {
+        HashMap param = query.getParam();
+        String name = (String) param.get("name");
+
+        Page<User> page = new Page();
+        page.setCurrent(query.getPageNum());
+        page.setSize(query.getPageSize());
+
+        IPage result = userService.pageC(page);
+
+        System.out.println("总页数：" + result.getTotal());
+
+        return result.getRecords();
+    }
+
+    @PostMapping("/listPageCC")
+    public List<User> listPageCC(@RequestBody QuaryPageParam query) {
+        HashMap param = query.getParam();
+        String name = (String) param.get("name");
+
+        Page<User> page = new Page();
+        page.setCurrent(query.getPageNum());
+        page.setSize(query.getPageSize());
+
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.like(User::getName, name);
+
+        IPage result = userService.pageCC(page, lambdaQueryWrapper);
+
+        System.out.println("总页数：" + result.getTotal());
+
+        return result.getRecords();
+    }
+
+    @PostMapping("/listPageSuc")
+    public Result listPageSuc(@RequestBody QuaryPageParam query) {
+        HashMap param = query.getParam();
+        String name = (String) param.get("name");
+
+        Page<User> page = new Page();
+        page.setCurrent(query.getPageNum());
+        page.setSize(query.getPageSize());
+
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.like(User::getName, name);
+
+        IPage result = userService.pageCC(page, lambdaQueryWrapper);
+
+        System.out.println("总页数：" + result.getTotal());
+
+        return Result.success(result.getTotal(), result.getRecords());
     }
 }
