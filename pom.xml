@@ -5,6 +5,9 @@
     <!-- 项目模型版本，必须为 4.0.0 -->
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
+    <modules>
+        <module>System</module>
+    </modules>
 
     <!-- 父项目配置 -->
     <parent>
@@ -17,85 +20,5 @@
     <groupId>org.example</groupId>
     <artifactId>storeManageSystem</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-    <!-- 项目属性配置 -->
-    <properties>
-        <!-- Java 编译器版本 -->
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
-
-    <!-- 项目依赖配置 -->
-    <dependencies>
-        <!-- Spring Boot Web 启动器，包含了 Web 开发所需的常见依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!-- MySQL 数据库驱动 -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.5</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- Lombok 库，用于简化 Java 代码 -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <!-- Spring Boot 测试启动器，用于测试项目 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- MyBatis-Plus 启动器 -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.1</version>
-        </dependency>
-        <!--        代码生成器-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <version>3.4.1</version>
-        </dependency>
-        <!-- FreeMarker 模板引擎，用于代码生成和视图解析 -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.30</version>
-        </dependency>
-        <!-- Swagger 库，用于生成 API 文档 -->
-        <dependency>
-            <groupId>com.spring4all</groupId>
-            <artifactId>spring-boot-starter-swagger</artifactId>
-            <version>1.5.1.RELEASE</version>
-        </dependency>
-    </dependencies>
-
-    <!-- Maven 构建插件配置 -->
-    <build>
-        <plugins>
-            <!-- Spring Boot Maven 插件，用于构建和打包 Spring Boot 应用 -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <!-- 排除 Lombok 依赖 -->
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

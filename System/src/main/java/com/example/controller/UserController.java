@@ -4,7 +4,7 @@ package com.example.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.common.QuaryPageParam;
+import com.example.common.QueryPageParam;
 import com.example.common.Result;
 import com.example.entity.User;
 import com.example.service.IUserService;
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PostMapping("/listPage")
-    public List<User> listPage(@RequestBody QuaryPageParam query) {
+    public List<User> listPage(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();
         String name = (String) param.get("name");
 
@@ -85,7 +85,7 @@ public class UserController {
     }
 
     @PostMapping("/listPageC")
-    public List<User> listPageC(@RequestBody QuaryPageParam query) {
+    public List<User> listPageC(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();
         String name = (String) param.get("name");
 
@@ -101,7 +101,7 @@ public class UserController {
     }
 
     @PostMapping("/listPageCC")
-    public List<User> listPageCC(@RequestBody QuaryPageParam query) {
+    public List<User> listPageCC(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();
         String name = (String) param.get("name");
 
@@ -120,7 +120,7 @@ public class UserController {
     }
 
     @PostMapping("/listPageSuc")
-    public Result listPageSuc(@RequestBody QuaryPageParam query) {
+    public Result listPageSuc(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();
         String name = (String) param.get("name");
 
