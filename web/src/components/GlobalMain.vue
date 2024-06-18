@@ -51,8 +51,8 @@
         <el-table-column prop="phone" label="电话" width="200%">
         </el-table-column>
         <el-table-column prop="operate" label="操作">
-          <el-button size="small" type="success">编辑</el-button>
-          <el-button size="small" type="danger">删除</el-button>
+          <el-button size="small" type="success" @click="mod">编辑</el-button>
+          <el-button size="small" type="danger" @click="del">删除</el-button>
         </el-table-column>
       </el-table>
     </div>
@@ -120,6 +120,7 @@
 export default {
   name: "GlobalMain",
   data() {
+    //检验年龄大小
     let checkAge = (rule, value, callback) => {
       if (value > 150) {
         callback(new Error("年龄过大"));
@@ -127,6 +128,7 @@ export default {
         callback();
       }
     };
+    //检验账户重复
     let checkDuplicate = (rule, value, callback) => {
       if (this.form.id) {
         return callback();
@@ -140,30 +142,30 @@ export default {
       })
     };
     return {
-      tableData: [],
-      pageSize: 5,
-      pageNum: 1,
-      pageTotal: 0,
+      tableData: [], // 表格主体内容
+      pageSize: 5, // 一页显示条目
+      pageNum: 1, // 当前页数
+      pageTotal: 0, // 总条目
       name: '',
       sex: '',
-      sexs: [{
+      sexs: [{ // 性别集
         value: '1',
         label: '男'
       }, {
         value: '0',
         label: '女'
       }],
-      centerDialogVisible: false,
-      form: {
-        no: null,
+      centerDialogVisible: false, // 模态框显示
+      form: { // 模态框中表单
+        no: null, // 账号
         name: null,
         password: null,
         age: null,
         sex: "1",
         phone: null,
-        roleId: "2"
+        roleId: "2" // 权限
       },
-      rules: {
+      rules: { // 检验
         no: [
           {required: true, message: "请输入账号", trigger: 'blur'},
           {min: 3, max: 8, message: "长度在3到8个字符", trigger: 'blur'},
@@ -190,12 +192,12 @@ export default {
     }
   },
   methods: {
-    loadGet() {
+    loadGet() { // 未使用
       this.$axios.get("user/list").then(res => res.data).then(res => {
         this.tableData = res;
       })
     },
-    loadPost() {
+    loadPost() { // 从后端查询数据
       this.$axios.post("user/listPageSuc", {
         pageSize: this.pageSize,
         pageNum: this.pageNum,
@@ -217,21 +219,27 @@ export default {
         }
       })
     },
-    resetParam() {
+    resetParam() { // 重置搜索框
       this.name = ''
       this.sex = ''
       this.loadPost()
     },
-    resetForm() {
+    resetForm() { // 重置添加模态框
       this.$refs.form.resetFields();
     },
-    add() {
+    add() { // 打开添加模态框
       this.centerDialogVisible = true
       this.$nextTick(() => {
         this.resetForm()
       })
     },
-    save() {
+    mod() { // 打开修改模态框
+
+    },
+    del() { // 打开删除模态框
+
+    },
+    save() { // 添加用户
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.$axios.post("user/save", this.form).then(res => res.data).then(res => {
@@ -266,7 +274,7 @@ export default {
       this.loadPost()
     }
   },
-  beforeMount() {
+  beforeMount() { // 页面加载前
     // this.loadGet();
     this.loadPost();
   }
