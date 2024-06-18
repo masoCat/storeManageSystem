@@ -8,7 +8,7 @@
           suffix-icon="el-icon-search"
           style="width: 200px;"
           @keyup.enter.native="loadPost"></el-input>
-      <el-select v-model="sex" placeholder="请选择性别">
+      <el-select v-model="sex" placeholder="请选择性别" style="margin-left: 5px">
         <el-option
             v-for="item in sexs"
             :key="item.value"
@@ -18,6 +18,8 @@
       </el-select>
       <el-button type="primary" style="margin-left: 5px;" @click="loadPost">查询</el-button>
       <el-button type="success" @click="resetParam">重置</el-button>
+      <el-button type="primary" style="margin-left: 5px;" @click="add">新增</el-button>
+
     </div>
 
     <div>
@@ -61,13 +63,55 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="pageNum"
-          :page-sizes="[2, 5, 10]"
+          :page-sizes="[5, 10, 20]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="pageTotal">
       </el-pagination>
     </div>
-
+    <el-dialog
+        title="新增用户"
+        :visible.sync="centerDialogVisible"
+        width="30%"
+        center>
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="账号">
+          <el-col :span="20">
+            <el-input v-model="form.no"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="姓名">
+          <el-col :span="20">
+            <el-input v-model="form.name"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-col :span="20">
+            <el-input v-model="form.password"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="年龄">
+          <el-col :span="20">
+            <el-input v-model="form.age"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-radio-group v-model="form.sex">
+            <el-radio label="1">男</el-radio>
+            <el-radio label="0">女</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="电话">
+          <el-col :span="20">
+            <el-input v-model="form.phone"></el-input>
+          </el-col>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="save">确 定</el-button>
+        <el-button @click="centerDialogVisible = false">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -77,7 +121,7 @@ export default {
   data() {
     return {
       tableData: [],
-      pageSize: 2,
+      pageSize: 5,
       pageNum: 1,
       pageTotal: 0,
       name: '',
@@ -88,7 +132,17 @@ export default {
       }, {
         value: '0',
         label: '女'
-      }]
+      }],
+      centerDialogVisible: false,
+      form: {
+        no: null,
+        name: null,
+        password: null,
+        age: null,
+        sex: "1",
+        phone: null,
+        roleId: "2"
+      }
     }
   },
   methods: {
@@ -106,7 +160,7 @@ export default {
           sex: this.sex
         }
       }).then(res => res.data).then(res => {
-        if (res.code == 200) {
+        if (res.code === 200) {
           this.tableData = res.data;
           this.tableData.forEach(item => {
             item.sex = (parseInt(item.sex) === 1 ? "男" : "女");
@@ -119,9 +173,29 @@ export default {
         }
       })
     },
-    resetParam(){
-      this.name=''
-      this.sex=''
+    add() {
+      this.centerDialogVisible = true
+    },
+    save() {
+      this.$axios.post("user/save", this.form).then(res => res.data).then(res => {
+        if (res.code === 200) {
+          this.$message({
+            message:"添加成功",
+            type:"success"
+          })
+          this.centerDialogVisible = false
+          this.loadPost()
+        } else {
+          this.$message({
+            message:"添加失败",
+            type:"error"
+          })
+        }
+      })
+    },
+    resetParam() {
+      this.name = ''
+      this.sex = ''
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);

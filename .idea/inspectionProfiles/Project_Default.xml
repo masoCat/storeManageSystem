@@ -4,7 +4,7 @@
     <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="10">
+          <list size="24">
             <item index="0" class="java.lang.String" itemvalue="nobr" />
             <item index="1" class="java.lang.String" itemvalue="noembed" />
             <item index="2" class="java.lang.String" itemvalue="comment" />
@@ -15,6 +15,20 @@
             <item index="7" class="java.lang.String" itemvalue="el-main" />
             <item index="8" class="java.lang.String" itemvalue="el-header" />
             <item index="9" class="java.lang.String" itemvalue="el-aside" />
+            <item index="10" class="java.lang.String" itemvalue="el-form-item" />
+            <item index="11" class="java.lang.String" itemvalue="el-col" />
+            <item index="12" class="java.lang.String" itemvalue="el-input" />
+            <item index="13" class="java.lang.String" itemvalue="el-form" />
+            <item index="14" class="java.lang.String" itemvalue="el-button" />
+            <item index="15" class="java.lang.String" itemvalue="el-dialog" />
+            <item index="16" class="java.lang.String" itemvalue="el-table-column" />
+            <item index="17" class="java.lang.String" itemvalue="el-tag" />
+            <item index="18" class="java.lang.String" itemvalue="el-table" />
+            <item index="19" class="java.lang.String" itemvalue="el-select" />
+            <item index="20" class="java.lang.String" itemvalue="el-option" />
+            <item index="21" class="java.lang.String" itemvalue="el-pagination" />
+            <item index="22" class="java.lang.String" itemvalue="el-radio-group" />
+            <item index="23" class="java.lang.String" itemvalue="el-radio" />
           </list>
         </value>
       </option>
