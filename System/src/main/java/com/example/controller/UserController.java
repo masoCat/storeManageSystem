@@ -3,6 +3,7 @@ package com.example.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.common.QueryPageParam;
 import com.example.common.Result;
@@ -59,10 +60,12 @@ public class UserController {
 
     //查询（模糊，匹配）
     @PostMapping("/listP")
-    public List<User> listP(@RequestBody User user) {
+    public Result listP(@RequestBody User user) {
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.like(User::getName, user.getName());
-        return userService.list(lambdaQueryWrapper);
+        if (StringUtils.isNotBlank(user.getName())) {
+            lambdaQueryWrapper.like(User::getName, user.getName());
+        }
+        return Result.success(userService.list(lambdaQueryWrapper));
     }
 
     @PostMapping("/listPage")
@@ -123,17 +126,17 @@ public class UserController {
     public Result listPageSuc(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();
         String name = (String) param.get("name");
+        String sex = (String) param.get("sex");
 
         Page<User> page = new Page();
         page.setCurrent(query.getPageNum());
         page.setSize(query.getPageSize());
 
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.like(User::getName, name);
+        if(StringUtils.isNotBlank(name) && !"null".equals(name)) lambdaQueryWrapper.like(User::getName, name);
+        if(StringUtils.isNotBlank(sex) ) lambdaQueryWrapper.eq(User::getSex, sex);
 
         IPage result = userService.pageCC(page, lambdaQueryWrapper);
-
-        System.out.println("总页数：" + result.getTotal());
 
         return Result.success(result.getTotal(), result.getRecords());
     }
