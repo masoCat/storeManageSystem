@@ -131,7 +131,7 @@ export default {
       if (this.form.id) {
         return callback();
       }
-      this.$axios.get("user/findByNo?no=" + this.form.no).then(res=>res.data).then(res => {
+      this.$axios.get("user/findByNo?no=" + this.form.no).then(res => res.data).then(res => {
         if (res.code != 200) {
           callback()
         } else {
@@ -222,8 +222,14 @@ export default {
       this.sex = ''
       this.loadPost()
     },
+    resetForm() {
+      this.$refs.form.resetFields();
+    },
     add() {
       this.centerDialogVisible = true
+      this.$nextTick(() => {
+        this.resetForm()
+      })
     },
     save() {
       this.$refs.form.validate((valid) => {
