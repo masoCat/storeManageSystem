@@ -13,6 +13,10 @@ public class Result {
         return result(400, "失败", 0L, null);
     }
 
+    public static Result success(Object data) {
+        return result(200, "成功", 0L, data);
+    }
+
     public static Result success(Long total, Object data) {
         return result(200, "成功", total, data);
     }
