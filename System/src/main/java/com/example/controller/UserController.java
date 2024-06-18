@@ -34,10 +34,16 @@ public class UserController {
         return userService.list();
     }
 
+    @GetMapping("/findByNo")
+    public Result findByNo(@RequestParam String no) {
+        List list = userService.lambdaQuery().eq(User::getNo, no).list();
+        return list.size() > 0 ? Result.success(list) : Result.fail();
+    }
+
     //新增
     @PostMapping("/save")
     public Result save(@RequestBody User user) {
-        return userService.save(user)?Result.success():Result.fail();
+        return userService.save(user) ? Result.success() : Result.fail();
     }
 
     //修改
@@ -133,8 +139,8 @@ public class UserController {
         page.setSize(query.getPageSize());
 
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        if(StringUtils.isNotBlank(name) && !"null".equals(name)) lambdaQueryWrapper.like(User::getName, name);
-        if(StringUtils.isNotBlank(sex) ) lambdaQueryWrapper.eq(User::getSex, sex);
+        if (StringUtils.isNotBlank(name) && !"null".equals(name)) lambdaQueryWrapper.like(User::getName, name);
+        if (StringUtils.isNotBlank(sex)) lambdaQueryWrapper.eq(User::getSex, sex);
 
         IPage result = userService.pageCC(page, lambdaQueryWrapper);
 
