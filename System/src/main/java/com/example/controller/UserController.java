@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.common.QueryPageParam;
 import com.example.common.Result;
+import com.example.entity.Menu;
 import com.example.entity.User;
+import com.example.service.IMenuService;
 import com.example.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +28,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IMenuService menuService;
 
     @GetMapping("/list")
     public List<User> list() {
@@ -47,7 +53,16 @@ public class UserController {
                 .eq(User::getNo, user.getNo())
                 .eq(User::getPassword, user.getPassword())
                 .list();
-        return list.size() > 0 ? Result.success(list.get(0)) : Result.fail();
+
+        if (list.size() > 0) {
+            User user1 = (User) list.get(0);
+            List Menulist = menuService.lambdaQuery().like(Menu::getMenuright, user1.getRoleId()).list();
+            HashMap res = new HashMap();
+            res.put("user",user1);
+            res.put("menu",Menulist);
+            return Result.success(res);
+        }
+        return Result.fail();
     }
 
     //新增

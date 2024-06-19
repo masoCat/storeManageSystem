@@ -34,13 +34,14 @@ public class CodeGenerator {
         }
         throw new MybatisPlusException("请输入正确的" + tip + "！");
     }
+
     public static void main(String[] args) {
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir");
+        String projectPath = System.getProperty("user.dir") + "/System"; // +“/模块名”
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("maso");
         gc.setOpen(false);
