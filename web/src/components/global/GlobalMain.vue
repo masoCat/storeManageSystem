@@ -43,7 +43,7 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="roleId" label="角色" width="100%">
+        <el-table-column prop="roleId" label="权限" width="100%">
           <template slot-scope="scope">
             <el-tag
                 :type="(scope.row.roleId === 0 ? 'danger' : (scope.row.roleId === 1 ? 'primary' : 'success'))">

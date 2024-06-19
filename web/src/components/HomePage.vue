@@ -33,7 +33,7 @@
           权限
         </template>
         <el-tag
-            type="success"
+            :type="(user.roleId === 0 ? 'danger' : (scope.row.roleId === 1 ? 'primary' : 'success'))"
             disable-transitions>{{ user.roleId == 0 ? "超级管理员" : (user.roleId == 1 ? "管理员" : "用户") }}
         </el-tag>
 
