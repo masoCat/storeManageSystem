@@ -40,10 +40,20 @@ public class UserController {
         return list.size() > 0 ? Result.success(list) : Result.fail();
     }
 
+    //登录
+    @PostMapping("/login")
+    public Result login(@RequestBody User user) {
+        List list = userService.lambdaQuery()
+                .eq(User::getNo,user.getNo())
+                .eq(User::getPassword,user.getPassword())
+                .list();
+
+        return list.size()>0?Result.success():Result.fail();
+    }
     //新增
     @PostMapping("/save")
-    public Result save(@RequestBody User user) {
-        return userService.save(user) ? Result.success() : Result.fail();
+    public boolean save(@RequestBody User user) {
+        return userService.save(user);
     }
 
     //修改
@@ -59,9 +69,9 @@ public class UserController {
     }
 
     //删除
-    @PostMapping("/delete")
-    public boolean delete(Integer id) {
-        return userService.removeById(id);
+    @GetMapping("/delete")
+    public Result delete(Integer id) {
+        return userService.removeById(id) ? Result.success() : Result.fail();
     }
 
     //查询（模糊，匹配）

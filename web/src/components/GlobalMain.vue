@@ -28,22 +28,22 @@
                 :header-cell-style="{background: '#8b8888',color:'#ffffff'}"
                 border
       >
-        <el-table-column prop="id" label="ID" width="120%">
+        <el-table-column prop="no" label="账号" width="180%">
         </el-table-column>
-        <el-table-column prop="no" label="账号" width="150%">
+        <el-table-column prop="password" label="密码" width="180%">
         </el-table-column>
-        <el-table-column prop="name" label="姓名" width="150%">
+        <el-table-column prop="name" label="姓名" width="180%">
         </el-table-column>
-        <el-table-column prop="age" label="年龄" width="120%">
+        <el-table-column prop="age" label="年龄" width="100%">
         </el-table-column>
-        <el-table-column prop="sex" label="性别" width="120%">
+        <el-table-column prop="sex" label="性别" width="100%">
           <template slot-scope="scope">
             <el-tag :type="(scope.row.sex === 1 ? 'primary' : 'success')"
                     disable-transitions>{{ scope.row.sex === 1 ? "男" : "女" }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="roleId" label="角色" width="120%">
+        <el-table-column prop="roleId" label="角色" width="100%">
           <template slot-scope="scope">
             <el-tag
                 :type="(scope.row.roleId === 0 ? 'danger' : (scope.row.roleId === 1 ? 'primary' : 'success'))">
@@ -56,7 +56,9 @@
         <el-table-column prop="operate" label="操作">
           <template slot-scope="scope">
             <el-button size="small" type="success" @click="mod(scope.row)">编辑</el-button>
-            <el-button size="small" type="danger" @click="del(scope.row)">删除</el-button>
+            <el-popconfirm title="确定删除？" @confirm="del(scope.row.id)" style="margin-left: 20px">
+              <el-button slot="reference" size="small" type="danger">删除</el-button>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -238,21 +240,37 @@ export default {
       })
     },
     mod(row) { // 打开修改模态框
-      this.form.id = row.id
-      this.form.no = row.no // 账号
-      this.form.name = row.name
-      this.form.password = row.password
-      this.form.age = row.age + ""
-      this.form.sex = row.sex + ""
-      this.form.phone = row.phone
-      this.form.roleId = row.roleId + "" // 权限
-
       this.centerDialogVisible = true
+      this.$nextTick(() => {
+        this.resetForm()
+        this.form.id = row.id
+        this.form.no = row.no // 账号
+        this.form.name = row.name
+        this.form.password = row.password
+        this.form.age = row.age + ""
+        this.form.sex = row.sex + ""
+        this.form.phone = row.phone
+        this.form.roleId = row.roleId + "" // 权限
+      })
     },
-    del() { // 打开删除模态框
-
+    del(id) { // 打开删除模态框
+      this.$axios.get("user/delete?id="+id).then(res => res.data).then(res => {
+        if (res.code === 200) {
+          this.$message({
+            message: "删除成功",
+            type: "success"
+          })
+          this.centerDialogVisible = false
+          this.loadPost()
+        } else {
+          this.$message({
+            message: "删除失败",
+            type: "error"
+          })
+        }
+      })
     },
-    saveOrMod() { // 添加用户
+    saveOrMod() { // 添加或修改用户
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.$axios.post("user/saveOrMod", this.form).then(res => res.data).then(res => {
@@ -264,10 +282,11 @@ export default {
               })
               this.centerDialogVisible = false
               this.loadPost()
+              this.resetForm()
             } else {
               this.$message({
                 message: action + "失败",
-                type: "success"
+                type: "error"
               })
             }
           })
