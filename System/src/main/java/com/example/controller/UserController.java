@@ -54,8 +54,8 @@ public class UserController {
 
     //新增或修改
     @PostMapping("/saveOrMod")
-    public boolean saveOrMod(@RequestBody User user) {
-        return userService.saveOrUpdate(user);
+    public Result saveOrMod(@RequestBody User user) {
+        return userService.saveOrUpdate(user) ? Result.success() : Result.fail();
     }
 
     //删除
@@ -128,6 +128,7 @@ public class UserController {
         return result.getRecords();
     }
 
+    // 前端用这个查询
     @PostMapping("/listPageSuc")
     public Result listPageSuc(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();

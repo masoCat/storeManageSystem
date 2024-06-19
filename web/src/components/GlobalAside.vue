@@ -36,6 +36,6 @@ export default {
 
 <style scoped>
 .aside {
-  height: 100vh;
+  height: 100%;
 }
 </style>

@@ -18,6 +18,8 @@ export default {
 
 <style>
 #app {
-  height: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 </style>

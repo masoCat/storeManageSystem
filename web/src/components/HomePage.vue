@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container style="flex-grow: 1">
     <el-aside :width="aside_width">
       <GlobalAside :isCollapse="isCollapse"></GlobalAside>
     </el-aside>
@@ -47,10 +47,6 @@ export default {
 </script>
 
 <style scoped>
-* {
-  height: 100%
-}
-
 .el-header {
   border-bottom: #e3dddd 3px solid;
 }
@@ -58,6 +54,4 @@ export default {
 .el-main {
   padding: 5px;
 }
-
-
 </style>

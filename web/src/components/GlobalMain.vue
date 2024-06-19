@@ -1,6 +1,6 @@
 <template>
   <div>
-
+    <!--搜索栏-->
     <div style="margin-bottom: 5px">
       <el-input
           v-model="name"
@@ -22,6 +22,7 @@
 
     </div>
 
+    <!--用户列表-->
     <div>
       <el-table :data="tableData"
                 :header-cell-style="{background: '#8b8888',color:'#ffffff'}"
@@ -37,26 +38,31 @@
         </el-table-column>
         <el-table-column prop="sex" label="性别" width="120%">
           <template slot-scope="scope">
-            <el-tag :type="(scope.row.sex === '男' ? 'primary' : 'success')">{{ scope.row.sex }}</el-tag>
+            <el-tag :type="(scope.row.sex === 1 ? 'primary' : 'success')"
+                    disable-transitions>{{ scope.row.sex === 1 ? "男" : "女" }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="roleId" label="角色" width="120%">
           <template slot-scope="scope">
             <el-tag
-                :type="(scope.row.roleId === '超级管理员' ? 'danger' : (scope.row.roleId === '管理员' ? 'primary' : 'success'))">
-              {{ scope.row.roleId }}
+                :type="(scope.row.roleId === 0 ? 'danger' : (scope.row.roleId === 1 ? 'primary' : 'success'))">
+              {{ scope.row.roleId === 0 ? "超级管理员" : (scope.row.roleId === 1 ? "管理员" : "用户") }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="phone" label="电话" width="200%">
         </el-table-column>
         <el-table-column prop="operate" label="操作">
-          <el-button size="small" type="success" @click="mod">编辑</el-button>
-          <el-button size="small" type="danger" @click="del">删除</el-button>
+          <template slot-scope="scope">
+            <el-button size="small" type="success" @click="mod(scope.row)">编辑</el-button>
+            <el-button size="small" type="danger" @click="del(scope.row)">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
 
+    <!--分页栏-->
     <div>
       <el-pagination
           background
@@ -69,8 +75,10 @@
           :total="pageTotal">
       </el-pagination>
     </div>
+
+    <!--模态框-->
     <el-dialog
-        title="新增用户"
+        title="新增或修改"
         :visible.sync="centerDialogVisible"
         width="30%"
         center>
@@ -108,7 +116,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="save">确 定</el-button>
+        <el-button type="primary" @click="saveOrMod">确 定</el-button>
         <el-button @click="centerDialogVisible = false">取 消</el-button>
       </span>
     </el-dialog>
@@ -157,6 +165,7 @@ export default {
       }],
       centerDialogVisible: false, // 模态框显示
       form: { // 模态框中表单
+        id: null,
         no: null, // 账号
         name: null,
         password: null,
@@ -197,7 +206,7 @@ export default {
         this.tableData = res;
       })
     },
-    loadPost() { // 从后端查询数据
+    loadPost() { // 从后端获取数据
       this.$axios.post("user/listPageSuc", {
         pageSize: this.pageSize,
         pageNum: this.pageNum,
@@ -208,12 +217,7 @@ export default {
       }).then(res => res.data).then(res => {
         if (res.code === 200) {
           this.tableData = res.data;
-          this.tableData.forEach(item => {
-            item.sex = (parseInt(item.sex) === 1 ? "男" : "女");
-            item.roleId = (parseInt(item.roleId) === 0 ? "超级管理员" : (parseInt(item.roleId) === 1 ? "管理员" : "用户"));
-          });
           this.pageTotal = res.total
-          console.log(res)
         } else {
           alert('获取数据失败')
         }
@@ -233,27 +237,37 @@ export default {
         this.resetForm()
       })
     },
-    mod() { // 打开修改模态框
+    mod(row) { // 打开修改模态框
+      this.form.id = row.id
+      this.form.no = row.no // 账号
+      this.form.name = row.name
+      this.form.password = row.password
+      this.form.age = row.age + ""
+      this.form.sex = row.sex + ""
+      this.form.phone = row.phone
+      this.form.roleId = row.roleId + "" // 权限
 
+      this.centerDialogVisible = true
     },
     del() { // 打开删除模态框
 
     },
-    save() { // 添加用户
+    saveOrMod() { // 添加用户
       this.$refs.form.validate((valid) => {
         if (valid) {
-          this.$axios.post("user/save", this.form).then(res => res.data).then(res => {
+          this.$axios.post("user/saveOrMod", this.form).then(res => res.data).then(res => {
+            let action = this.form.id != null ? "修改" : "添加"
             if (res.code === 200) {
               this.$message({
-                message: "添加成功",
+                message: action + "成功",
                 type: "success"
               })
               this.centerDialogVisible = false
               this.loadPost()
             } else {
               this.$message({
-                message: "添加失败",
-                type: "error"
+                message: action + "失败",
+                type: "success"
               })
             }
           })
@@ -262,14 +276,12 @@ export default {
         }
       })
     },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+    handleSizeChange(val) { //更改每页条数
       this.pageNum = 1
       this.pageSize = val
       this.loadPost()
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+    handleCurrentChange(val) { //更改当前页数
       this.pageNum = val
       this.loadPost()
     }
