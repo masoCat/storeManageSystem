@@ -5,6 +5,10 @@ const routes = [
         path: '/',
         name: 'login',
         component: () => import('../components/LoginPage')
+    }, {
+        path: '/Index',
+        name: 'HomePage',
+        component: () => import('../components/HomePage')
     }
 ]
 

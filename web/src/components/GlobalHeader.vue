@@ -4,7 +4,7 @@
     <span class="title">欢迎来到仓库管理系统</span>
     <el-dropdown>
       <span class="dropdown">
-        <span>王小虎</span>
+        <span>{{user.name}}</span>
         <i class="el-icon-arrow-down"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
@@ -18,6 +18,11 @@
 <script>
 export default {
   name: "GlobalHeader",
+  data() {
+    return {
+      user: JSON.parse(sessionStorage.getItem('CurUser'))
+    }
+  },
   props: {
     icon: String
   },

@@ -44,12 +44,12 @@ public class UserController {
     @PostMapping("/login")
     public Result login(@RequestBody User user) {
         List list = userService.lambdaQuery()
-                .eq(User::getNo,user.getNo())
-                .eq(User::getPassword,user.getPassword())
+                .eq(User::getNo, user.getNo())
+                .eq(User::getPassword, user.getPassword())
                 .list();
-
-        return list.size()>0?Result.success():Result.fail();
+        return list.size() > 0 ? Result.success(list.get(0)) : Result.fail();
     }
+
     //新增
     @PostMapping("/save")
     public boolean save(@RequestBody User user) {
