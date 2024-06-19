@@ -4,12 +4,12 @@
     <span class="title">欢迎来到仓库管理系统</span>
     <el-dropdown>
       <span class="dropdown">
-        <span>{{user.name}}</span>
+        <span>{{ user.name }}</span>
         <i class="el-icon-arrow-down"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item @click.native="toUser">个人中心</el-dropdown-item>
-        <el-dropdown-item @click.native="exit">退出</el-dropdown-item>
+        <el-dropdown-item @click.native="exit">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -27,14 +27,30 @@ export default {
     icon: String
   },
   methods: {
+    collapse() { //侧边栏
+      this.$emit('doCollapse')
+    },
     toUser() {
-      console.log("user");
+      this.$router.push('/Home')
     },
     exit() {
-      console.log("exit");
-    },
-    collapse() {
-      this.$emit('doCollapse')
+      this.$confirm('确认退出？', '提示', {
+        confirmButtonText: '确定',
+        type: 'warning',
+        center: 'true'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '退出成功'
+        })
+        sessionStorage.clear()
+        this.$router.push('/')
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消退出'
+        })
+      })
     }
   }
 }

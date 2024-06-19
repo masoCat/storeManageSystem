@@ -1,57 +1,77 @@
 <template>
-  <el-container style="flex-grow: 1">
-    <el-aside :width="aside_width">
-      <GlobalAside :isCollapse="isCollapse"></GlobalAside>
-    </el-aside>
+  <div style="text-align: center;background-color: #f1f1f3;height: 100%;padding: 0px;margin: 0px;">
+    <h1 style="font-size: 50px;">{{ '欢迎你！' + user.name }}</h1>
+    <el-descriptions title="个人中心" :column="2" size="40" border>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-s-custom"></i>
+          账号
+        </template>
+        {{ user.no }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-mobile-phone"></i>
+          电话
+        </template>
+        {{ user.phone }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-location-outline"></i>
+          性别
+        </template>
+        <el-tag
+            :type="user.sex === '1' ? 'primary' : 'danger'"
+            disable-transitions><i
+            :class="user.sex==1?'el-icon-male':'el-icon-female'"></i>{{ user.sex == 1 ? "男" : "女" }}
+        </el-tag>
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template slot="label">
+          <i class="el-icon-tickets"></i>
+          权限
+        </template>
+        <el-tag
+            type="success"
+            disable-transitions>{{ user.roleId == 0 ? "超级管理员" : (user.roleId == 1 ? "管理员" : "用户") }}
+        </el-tag>
 
-    <el-container>
-      <el-header>
-        <GlobalHeader :icon="icon" @doCollapse="doCollapse"></GlobalHeader>
-      </el-header>
+      </el-descriptions-item>
+    </el-descriptions>
 
-      <el-main>
-        <GlobalMain></GlobalMain>
-      </el-main>
-    </el-container>
-  </el-container>
+    <DateUtils></DateUtils>
+  </div>
 </template>
 
 <script>
-
-import GlobalAside from "@/components/GlobalAside";
-import GlobalHeader from "@/components/GlobalHeader";
-import GlobalMain from "@/components/GlobalMain";
+import DateUtils from "./utils/DateUtils";
 
 export default {
-  name: "HomePage",
-  components: {
-    GlobalAside,
-    GlobalMain,
-    GlobalHeader
-  },
+  name: "UserPage",
+  components: {DateUtils},
   data() {
     return {
-      isCollapse: false,
-      aside_width: "300px",
-      icon: "el-icon-s-fold"
+      user: {}
     }
   },
+  computed: {},
   methods: {
-    doCollapse() {
-      this.isCollapse = !this.isCollapse;
-      this.aside_width = this.isCollapse ? "63px" : "300px";
-      this.icon = this.isCollapse ? "el-icon-s-unfold" : "el-icon-s-fold"
+    init() {
+      this.user = JSON.parse(sessionStorage.getItem('CurUser'))
     }
+  },
+  created() {
+    this.init()
   }
 }
 </script>
 
 <style scoped>
-.el-header {
-  border-bottom: #e3dddd 3px solid;
-}
+.el-descriptions {
+  width: 90%;
 
-.el-main {
-  padding: 5px;
+  margin: 0 auto;
+  text-align: center;
 }
 </style>
