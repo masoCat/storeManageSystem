@@ -18,7 +18,7 @@
       </el-select>
       <el-button type="primary" style="margin-left: 5px;" @click="loadPost">查询</el-button>
       <el-button type="success" @click="resetParam">重置</el-button>
-      <el-button type="primary" style="margin-left: 5px;" @click="add">新增</el-button>
+      <el-button type="primary" style="float: right; margin-right: 6%;" @click="add">新增</el-button>
 
     </div>
 
@@ -53,7 +53,7 @@
         </el-table-column>
         <el-table-column prop="phone" label="电话" width="200%">
         </el-table-column>
-        <el-table-column prop="operate" label="操作">
+        <el-table-column prop="operate" label="操作" width="180%">
           <template slot-scope="scope">
             <el-button size="small" type="success" @click="mod(scope.row)">编辑</el-button>
             <el-popconfirm title="确定删除？" @confirm="del(scope.row.id)" style="margin-left: 20px">
@@ -203,11 +203,6 @@ export default {
     }
   },
   methods: {
-    loadGet() { // 未使用
-      this.$axios.get("user/list").then(res => res.data).then(res => {
-        this.tableData = res;
-      })
-    },
     loadPost() { // 从后端获取数据
       this.$axios.post("user/listPageSuc", {
         pageSize: this.pageSize,
@@ -238,6 +233,7 @@ export default {
       this.centerDialogVisible = true
       this.$nextTick(() => {
         this.resetForm()
+        this.form.id = null
       })
     },
     mod(row) { // 打开修改模态框
@@ -307,7 +303,6 @@ export default {
     }
   },
   beforeMount() { // 页面加载前
-    // this.loadGet();
     this.loadPost();
   }
 }
