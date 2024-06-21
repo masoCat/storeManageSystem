@@ -156,9 +156,9 @@ export default {
       pageSize: 5, // 一页显示条目
       pageNum: 1, // 当前页数
       pageTotal: 0, // 总条目
-      name: '',
-      sex: '',
-      sexs: [{ // 性别集
+      name: '', // 搜索时用到的姓名
+      sex: '', // 搜索时用到的性别
+      sexs: [{ // 模态框中选择的性别
         value: '1',
         label: '男'
       }, {
@@ -226,7 +226,7 @@ export default {
       this.sex = ''
       this.loadPost()
     },
-    resetForm() { // 重置添加模态框
+    resetForm() { // 重置模态框
       this.$refs.form.resetFields();
     },
     add() { // 打开添加模态框
@@ -250,7 +250,7 @@ export default {
         this.form.roleId = row.roleId + "" // 权限
       })
     },
-    del(id) { // 打开删除模态框
+    del(id) { // 删除
       this.$axios.get("user/delete?id=" + id).then(res => res.data).then(res => {
         if (res.code === 200) {
           this.$message({
@@ -267,7 +267,7 @@ export default {
         }
       })
     },
-    saveOrMod() { // 添加或修改用户
+    saveOrMod() { // 添加或修改管理员
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.$axios.post("user/saveOrMod", this.form).then(res => res.data).then(res => {

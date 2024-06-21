@@ -12,7 +12,7 @@
         <result column="sex" property="sex" />
         <result column="phone" property="phone" />
         <result column="role_id" property="roleId" />
-        <result column="isValid" property="isvalid" />
+        <result column="isValid" property="isValid" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

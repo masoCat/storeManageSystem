@@ -156,8 +156,8 @@ export default {
       pageSize: 5, // 一页显示条目
       pageNum: 1, // 当前页数
       pageTotal: 0, // 总条目
-      name: '',
-      sex: '',
+      name: '', // 搜索时用到的姓名
+      sex: '', // 搜索时用到的性别
       sexs: [{ // 性别集
         value: '1',
         label: '男'
