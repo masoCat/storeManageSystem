@@ -30,6 +30,13 @@ public class StorageController {
     @Resource
     IStorageService storageService;
 
+    //查询所有内容
+    @GetMapping("/list")
+    public Result list() {
+        List list = storageService.lambdaQuery().list();
+        return Result.success(list);
+    }
+
     // 根据仓库名查询
     @GetMapping("/findByName")
     public Result findByName(@RequestParam String name) {
