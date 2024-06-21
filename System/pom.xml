@@ -31,7 +31,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.5</version>
+            <version>5.1.44</version>
             <scope>runtime</scope>
         </dependency>
         <!-- Lombok 库，用于简化 Java 代码 -->
@@ -53,7 +53,7 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.4.1</version>
         </dependency>
-        <!--        代码生成器-->
+        <!-- 代码生成器-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
