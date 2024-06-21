@@ -49,6 +49,8 @@
         </el-table-column>
         <el-table-column prop="count" label="数量">
         </el-table-column>
+        <el-table-column prop="createtime" label="操作时间">
+        </el-table-column>
         <el-table-column prop="remark" label="备注">
         </el-table-column>
       </el-table>
