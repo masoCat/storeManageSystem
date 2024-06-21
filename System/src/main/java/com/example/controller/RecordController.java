@@ -1,7 +1,7 @@
 package com.example.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -36,7 +36,7 @@ public class RecordController {
     @PostMapping("/listPage")
     public Result listPage(@RequestBody QueryPageParam query) {
         HashMap param = query.getParam();
-        String goods = (String) param.get("goods");
+        String name = (String) param.get("name");
         String goodstype = (String) param.get("goodstype");
         String storage = (String) param.get("storage");
 
@@ -44,17 +44,18 @@ public class RecordController {
         page.setCurrent(query.getPageNum());
         page.setSize(query.getPageSize());
 
-        LambdaQueryWrapper<Record> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.isNotBlank(goods) && !"null".equals(goods)) {
-
+        QueryWrapper<Record> queryWrapper = new QueryWrapper<>();
+        queryWrapper.apply(" r.goods = g.id and g.storage = s.id and g.goodstype = t.id ");
+        if (StringUtils.isNotBlank(name) && !"null".equals(name)) {
+            queryWrapper.like("g.name", name);
         }
-        if (StringUtils.isNotBlank(goods) && !"null".equals(goods)) {
-
+        if (StringUtils.isNotBlank(storage) && !"null".equals(storage)) {
+            queryWrapper.eq("s.id", storage);
         }
-        if (StringUtils.isNotBlank(goods) && !"null".equals(goods)) {
-
+        if (StringUtils.isNotBlank(goodstype) && !"null".equals(goodstype)) {
+            queryWrapper.eq("t.id", goodstype);
         }
-        IPage result = recordService.pageCC(page, lambdaQueryWrapper);
+        IPage result = recordService.pageCC(page, queryWrapper);
 
         return Result.success(result.getTotal(), result.getRecords());
     }
