@@ -8,8 +8,7 @@
 
 export default {
   name: 'App',
-  components: {
-  }
+  components: {}
 }
 </script>
 
@@ -20,3 +19,4 @@ export default {
   flex-direction: column;
 }
 </style>
+
