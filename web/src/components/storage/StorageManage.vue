@@ -101,7 +101,7 @@ export default {
       pageSize: 5, // 一页显示条目
       pageNum: 1, // 当前页数
       pageTotal: 0, // 总条目
-      name: '',
+      name: '', // 搜索时用到的仓库名
       centerDialogVisible: false, // 模态框显示
       form: { // 模态框中表单
         id: null,
@@ -110,7 +110,7 @@ export default {
       },
       rules: { // 检验
         name: [
-          {required: true, message: "请输入名字", trigger: 'blur'},
+          {required: true, message: "请输入仓库名", trigger: 'blur'},
           {validator: checkDuplicate, trigger: 'blur'}
         ]
       }
@@ -122,9 +122,7 @@ export default {
         pageSize: this.pageSize,
         pageNum: this.pageNum,
         param: {
-          name: this.name,
-          sex: this.sex,
-          roleId: '1'
+          name: this.name
         }
       }).then(res => res.data).then(res => {
         if (res.code === 200) {
@@ -137,10 +135,9 @@ export default {
     },
     resetParam() { // 重置搜索框
       this.name = ''
-      this.sex = ''
       this.loadPost()
     },
-    resetForm() { // 重置添加模态框
+    resetForm() { // 重置模态框
       this.$refs.form.resetFields();
     },
     add() { // 打开添加模态框
@@ -159,7 +156,7 @@ export default {
         this.form.remark = row.remark
       })
     },
-    del(id) { // 打开删除模态框
+    del(id) { // 删除
       this.$axios.get("storage/delete?id=" + id).then(res => res.data).then(res => {
         if (res.code === 200) {
           this.$message({
@@ -176,7 +173,7 @@ export default {
         }
       })
     },
-    saveOrMod() { // 添加或修改用户
+    saveOrMod() { // 添加或修改仓库
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.$axios.post("storage/saveOrMod", this.form).then(res => res.data).then(res => {
