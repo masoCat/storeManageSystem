@@ -26,8 +26,11 @@
       </el-select>
       <el-button type="primary" style="margin-left: 5px;" @click="loadPost">查询</el-button>
       <el-button type="success" @click="resetParam">重置</el-button>
-      <el-button type="primary" style="float: right; margin-right: 6%;" @click="add">新增</el-button>
+      <el-button type="warning" style="margin-left: 10px;" @click="add">新增</el-button>
 
+
+      <el-button type="primary" style="float: right; margin-right: 3%;" @click="inOutGoods(2)">出库</el-button>
+      <el-button type="primary" style="float: right; margin-right: 1%;" @click="inOutGoods(1)">入库</el-button>
     </div>
 
     <!--物品列表-->
@@ -35,7 +38,8 @@
       <el-table :data="tableData"
                 :header-cell-style="{background: '#8b8888',color:'#ffffff'}"
                 border
-      >
+                highlight-current-row
+                @current-change="selectCurrentChange">
         <el-table-column prop="id" label="ID" width="180%">
         </el-table-column>
         <el-table-column prop="name" label="物品名" width="180%">
@@ -125,12 +129,61 @@
         <el-button @click="centerDialogVisible = false">取 消</el-button>
       </span>
     </el-dialog>
+
+
+    <!--入库模态框-->
+    <el-dialog
+        title="入库"
+        :visible.sync="inDialogVisible"
+        width="30%"
+        center>
+      <el-dialog
+          width="70%"
+          title="入库申请人"
+          :visible.sync="innerVisible"
+          append-to-body>
+        <SelectUser @doSelectUser="doSelectUser"></SelectUser>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="confirmUser">确 定</el-button>
+          <el-button @click="innerVisible = false">取 消</el-button>
+        </span>
+      </el-dialog>
+      <el-form ref="formInOut" :rules="rulesIn" :model="formInOut" label-width="80px">
+        <el-form-item label="物品名">
+          <el-col :span="20">
+            <el-input v-model="formInOut.goodsname" readonly></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="申请人">
+          <el-col :span="20">
+            <el-input v-model="formInOut.username" readonly @click.native="selectUser"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="数量" prop="count">
+          <el-col :span="20">
+            <el-input v-model="formInOut.count"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-col :span="20">
+            <el-input type="textarea" v-model="formInOut.remark"></el-input>
+          </el-col>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="doInOutGoods">确 定</el-button>
+        <el-button @click="inDialogVisible = false">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 
 <script>
+import SelectUser from "@/components/user/SelectUser";
+
 export default {
+  components: {SelectUser},
   name: "GoodsManage",
   data() {
     //检验物品重复
@@ -155,16 +208,24 @@ export default {
       }
     }
     return {
+      user: JSON.parse(sessionStorage.getItem("CurUser")),
       tableData: [], // 表格主体内容
       pageSize: 5, // 一页显示条目
       pageNum: 1, // 当前页数
       pageTotal: 0, // 总条目
+
       name: '', // 搜索框用到的物品名
       storage: null, // 搜索框用到的仓库名
       goodstype: null, // 搜索框用到的分类名
       storageData: [], // 物品所属仓库
       goodstypeData: [], // 物品所属分类
+
       centerDialogVisible: false, // 模态框显示
+      inDialogVisible: false, // 入库模态框显示
+      innerVisible: false, // 申请人模态框显示
+
+      currentRow: {}, // 点击物品后选中的数据
+      tempUser: {}, // 在申请人模态框点击用户后选中的数据
       form: { // 模态框中表单
         id: null,
         name: null,
@@ -183,6 +244,26 @@ export default {
         ],
         goodstype: [
           {required: true, message: "请选择分类", trigger: 'blur'},
+        ],
+        count: [
+          {required: true, message: '请输入数量', trigger: 'blur'},
+          {pattern: /^([1-9][0-9]*){1,4}$/, message: '数量必须为正整数字', trigger: 'blur'},
+          {validator: checkCount, trigger: 'blur'}
+        ]
+      },
+      formInOut: { // 入库表单
+        goods: '',
+        goodsname: '',
+        count: '',
+        username: '',
+        userid: '',
+        adminId: '',
+        remark: '',
+        action: '',
+      },
+      rulesIn: { // 入库表单校验
+        username: [
+          {required: true, message: "请选择入库申请人", trigger: 'blur'},
         ],
         count: [
           {required: true, message: '请输入数量', trigger: 'blur'},
@@ -267,6 +348,64 @@ export default {
         this.form.goodstype = row.goodstype
         this.form.count = row.count
         this.form.remark = row.remark
+      })
+    },
+    selectCurrentChange(val) { // 单选某一行
+      this.currentRow = val;
+    },
+    resetInForm() { // 重置入库模态框
+      this.$refs.formInOut.resetFields();
+    },
+    inOutGoods(action) { // 打开出入库模态框
+      if (!this.currentRow.id) {
+        alert("请选择记录");
+        return
+      }
+
+      this.inDialogVisible = true
+      this.$nextTick(() => {
+        this.resetInForm()
+      })
+
+      this.formInOut.goods = this.currentRow.id
+      this.formInOut.goodsname = this.currentRow.name
+      this.formInOut.adminId = this.user.id
+      this.formInOut.action = action
+    },
+    selectUser() { // 弹出模态框，用于选择入库的申请人
+      this.innerVisible = true
+    },
+    doSelectUser(val) { // 从申请人模态框获得数据
+      this.tempUser = val
+    },
+    confirmUser() { // 确认选择入库的申请人
+      this.formInOut.userid = this.tempUser.id
+      this.formInOut.username = this.tempUser.name
+      this.innerVisible = false
+    },
+    doInOutGoods() { // 提交出入库
+      let action = ""
+      if (this.formInOut.action === 1) {
+        action = "入库"
+      } else {
+        action = "出库"
+      }
+      this.formInOut.remark = action + "：" + this.formInOut.remark
+      this.$axios.post("record/save", this.formInOut).then(res => res.data).then(res => {
+        if (res.code === 200) {
+          this.$message({
+            message: action + '成功',
+            type: 'success'
+          })
+          this.inDialogVisible = false
+          this.loadPost()
+          this.resetInForm()
+        } else {
+          this.$message({
+            message: action + '失败',
+            type: 'error'
+          })
+        }
       })
     },
     del(id) { // 删除
