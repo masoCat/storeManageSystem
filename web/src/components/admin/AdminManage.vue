@@ -22,7 +22,7 @@
 
     </div>
 
-    <!--用户列表-->
+    <!--管理员列表-->
     <div>
       <el-table :data="tableData"
                 :header-cell-style="{background: '#8b8888',color:'#ffffff'}"

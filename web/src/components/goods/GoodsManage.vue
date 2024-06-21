@@ -30,7 +30,7 @@
 
     </div>
 
-    <!--用户列表-->
+    <!--物品列表-->
     <div>
       <el-table :data="tableData"
                 :header-cell-style="{background: '#8b8888',color:'#ffffff'}"

@@ -30,7 +30,7 @@ public class GoodsController {
     @Resource
     IGoodsService goodsService;
 
-    // 根据仓库名查询
+    // 根据物品名查询
     @GetMapping("/findByName")
     public Result findByName(@RequestParam String name) {
         List list = goodsService.lambdaQuery().eq(Goods::getName, name).list();

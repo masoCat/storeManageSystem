@@ -37,7 +37,7 @@ public class GoodstypeController {
         return Result.success(list);
     }
 
-    // 根据仓库名查询
+    // 根据分类名查询
     @GetMapping("/findByName")
     public Result findByName(@RequestParam String name) {
         List list = goodstypeService.lambdaQuery().eq(Goodstype::getName, name).list();
