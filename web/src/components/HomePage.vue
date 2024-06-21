@@ -22,9 +22,9 @@
           性别
         </template>
         <el-tag
-            :type="user.sex === '1' ? 'primary' : 'danger'"
+            :type="user.sex === 1 ? 'primary' : 'danger'"
             disable-transitions><i
-            :class="user.sex==1?'el-icon-male':'el-icon-female'"></i>{{ user.sex == 1 ? "男" : "女" }}
+            :class="user.sex=== 1 ? 'el-icon-male' : 'el-icon-female'"></i>{{ user.sex === 1 ? "男" : "女" }}
         </el-tag>
       </el-descriptions-item>
       <el-descriptions-item>
@@ -33,8 +33,8 @@
           权限
         </template>
         <el-tag
-            :type="(user.roleId === 0 ? 'danger' : (scope.row.roleId === 1 ? 'primary' : 'success'))"
-            disable-transitions>{{ user.roleId == 0 ? "超级管理员" : (user.roleId == 1 ? "管理员" : "用户") }}
+            :type="(user.roleId === 0 ? 'danger' : (user.roleId === 1 ? 'primary' : 'success'))"
+            disable-transitions>{{ user.roleId === 0 ? "超级管理员" : (user.roleId === 1 ? "管理员" : "用户") }}
         </el-tag>
 
       </el-descriptions-item>
