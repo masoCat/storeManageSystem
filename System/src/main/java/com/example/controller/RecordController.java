@@ -41,6 +41,13 @@ public class RecordController {
     public Result save(@RequestBody Record record) {
         Goods goods = goodsService.getById(record.getGoods());
         int num = record.getCount();
+
+        // 出库
+        if ("2".equals(record.getAction())) {
+            num = -num;
+            record.setCount(num);
+        }
+
         int newnum = goods.getCount() + num;
         goods.setCount(newnum);
         goodsService.updateById(goods);
@@ -55,6 +62,8 @@ public class RecordController {
         String name = (String) param.get("name");
         String goodstype = (String) param.get("goodstype");
         String storage = (String) param.get("storage");
+        String roleId = (String) param.get("roleId");
+        String userid = (String) param.get("userid");
 
         Page<Record> page = new Page();
         page.setCurrent(query.getPageNum());
@@ -62,6 +71,10 @@ public class RecordController {
 
         QueryWrapper<Record> queryWrapper = new QueryWrapper<>();
         queryWrapper.apply(" r.goods = g.id and g.storage = s.id and g.goodstype = t.id ");
+
+        if ("2".equals(roleId)) {
+            queryWrapper.apply(" r.userId = " + userid);
+        }
         if (StringUtils.isNotBlank(name) && !"null".equals(name)) {
             queryWrapper.like("g.name", name);
         }

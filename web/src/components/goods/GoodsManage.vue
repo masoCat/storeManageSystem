@@ -26,7 +26,7 @@
       </el-select>
       <el-button type="primary" style="margin-left: 5px;" @click="loadPost">查询</el-button>
       <el-button type="success" @click="resetParam">重置</el-button>
-      <el-button type="warning" style="margin-left: 10px;" @click="add">新增</el-button>
+      <el-button type="warning" style="margin-left: 10px;" @click="add" v-if="user.roleId!==2">新增</el-button>
 
 
       <el-button type="primary" style="float: right; margin-right: 3%;" @click="inOutGoods(2)">出库</el-button>
@@ -52,7 +52,7 @@
         </el-table-column>
         <el-table-column prop="remark" label="备注">
         </el-table-column>
-        <el-table-column prop="operate" label="操作" width="180%">
+        <el-table-column prop="operate" label="操作" width="180%" v-if="user.roleId!==2">
           <template slot-scope="scope">
             <el-button size="small" type="success" @click="mod(scope.row)">编辑</el-button>
             <el-popconfirm title="确定删除？" @confirm="del(scope.row.id)" style="margin-left: 20px">
@@ -131,15 +131,15 @@
     </el-dialog>
 
 
-    <!--入库模态框-->
+    <!--出入库模态框-->
     <el-dialog
-        title="入库"
-        :visible.sync="inDialogVisible"
+        title="出入库"
+        :visible.sync="inOutDialogVisible"
         width="30%"
         center>
       <el-dialog
           width="70%"
-          title="入库申请人"
+          title="出入库申请人"
           :visible.sync="innerVisible"
           append-to-body>
         <SelectUser @doSelectUser="doSelectUser"></SelectUser>
@@ -148,7 +148,7 @@
           <el-button @click="innerVisible = false">取 消</el-button>
         </span>
       </el-dialog>
-      <el-form ref="formInOut" :rules="rulesIn" :model="formInOut" label-width="80px">
+      <el-form ref="formInOut" :rules="rulesInOut" :model="formInOut" label-width="80px">
         <el-form-item label="物品名">
           <el-col :span="20">
             <el-input v-model="formInOut.goodsname" readonly></el-input>
@@ -172,7 +172,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="doInOutGoods">确 定</el-button>
-        <el-button @click="inDialogVisible = false">取 消</el-button>
+        <el-button @click="inOutDialogVisible = false">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -221,7 +221,7 @@ export default {
       goodstypeData: [], // 物品所属分类
 
       centerDialogVisible: false, // 模态框显示
-      inDialogVisible: false, // 入库模态框显示
+      inOutDialogVisible: false, // 出入库模态框显示
       innerVisible: false, // 申请人模态框显示
 
       currentRow: {}, // 点击物品后选中的数据
@@ -251,7 +251,7 @@ export default {
           {validator: checkCount, trigger: 'blur'}
         ]
       },
-      formInOut: { // 入库表单
+      formInOut: { // 出入库表单
         goods: '',
         goodsname: '',
         count: '',
@@ -261,9 +261,9 @@ export default {
         remark: '',
         action: '',
       },
-      rulesIn: { // 入库表单校验
+      rulesInOut: { // 出入库表单校验
         username: [
-          {required: true, message: "请选择入库申请人", trigger: 'blur'},
+          {required: true, message: "请选择出入库申请人", trigger: 'blur'},
         ],
         count: [
           {required: true, message: '请输入数量', trigger: 'blur'},
@@ -353,7 +353,7 @@ export default {
     selectCurrentChange(val) { // 单选某一行
       this.currentRow = val;
     },
-    resetInForm() { // 重置入库模态框
+    resetInForm() { // 重置出入库模态框
       this.$refs.formInOut.resetFields();
     },
     inOutGoods(action) { // 打开出入库模态框
@@ -362,7 +362,7 @@ export default {
         return
       }
 
-      this.inDialogVisible = true
+      this.inOutDialogVisible = true
       this.$nextTick(() => {
         this.resetInForm()
       })
@@ -372,13 +372,13 @@ export default {
       this.formInOut.adminId = this.user.id
       this.formInOut.action = action
     },
-    selectUser() { // 弹出模态框，用于选择入库的申请人
+    selectUser() { // 弹出模态框，用于选择出入库的申请人
       this.innerVisible = true
     },
     doSelectUser(val) { // 从申请人模态框获得数据
       this.tempUser = val
     },
-    confirmUser() { // 确认选择入库的申请人
+    confirmUser() { // 确认选择出入库的申请人
       this.formInOut.userid = this.tempUser.id
       this.formInOut.username = this.tempUser.name
       this.innerVisible = false
@@ -397,7 +397,7 @@ export default {
             message: action + '成功',
             type: 'success'
           })
-          this.inDialogVisible = false
+          this.inOutDialogVisible = false
           this.loadPost()
           this.resetInForm()
         } else {

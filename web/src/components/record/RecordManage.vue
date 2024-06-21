@@ -79,6 +79,7 @@ export default {
   name: "RecordManage",
   data() {
     return {
+      user: JSON.parse(sessionStorage.getItem("CurUser")),
       tableData: [], // 表格主体内容
       pageSize: 5, // 一页显示条目
       pageNum: 1, // 当前页数
@@ -98,7 +99,9 @@ export default {
         param: {
           name: this.name,
           goodstype: this.goodstype + "",
-          storage: this.storage + ""
+          storage: this.storage + "",
+          roleId: this.user.roleId + "",
+          userid: this.user.id + ""
         }
       }).then(res => res.data).then(res => {
         if (res.code === 200) {
