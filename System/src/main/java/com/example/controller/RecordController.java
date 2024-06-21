@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.common.QueryPageParam;
 import com.example.common.Result;
+import com.example.entity.Goods;
 import com.example.entity.Record;
+import com.example.service.IGoodsService;
 import com.example.service.IRecordService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +33,20 @@ public class RecordController {
 
     @Resource
     IRecordService recordService;
+    @Resource
+    IGoodsService goodsService;
+
+    //新增
+    @PostMapping("/save")
+    public Result save(@RequestBody Record record) {
+        Goods goods = goodsService.getById(record.getGoods());
+        int num = record.getCount();
+        int newnum = goods.getCount() + num;
+        goods.setCount(newnum);
+        goodsService.updateById(goods);
+
+        return recordService.save(record) ? Result.success() : Result.fail();
+    }
 
     // 前端用这个查询
     @PostMapping("/listPage")
