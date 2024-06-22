@@ -13,5 +13,6 @@
              storage s,
              goodstype t
             ${ew.customSqlSegment}
+        ORDER BY r.id
     </select>
 </mapper>

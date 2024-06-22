@@ -390,7 +390,6 @@ export default {
       } else {
         action = "出库"
       }
-      this.formInOut.remark = action + "：" + this.formInOut.remark
       this.$axios.post("record/save", this.formInOut).then(res => res.data).then(res => {
         if (res.code === 200) {
           this.$message({
