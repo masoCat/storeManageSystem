@@ -48,6 +48,7 @@ public class RecordController {
             record.setCount(num);
         }
 
+        // 入库
         int newnum = goods.getCount() + num;
         goods.setCount(newnum);
         goodsService.updateById(goods);

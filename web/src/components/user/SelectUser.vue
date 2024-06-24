@@ -46,7 +46,7 @@
           <template slot-scope="scope">
             <el-tag
                 :type="(scope.row.roleId === 0 ? 'danger' : (scope.row.roleId === 1 ? 'primary' : 'success'))">
-              {{ scope.row.roleId === 0 ? "超级管理员" : (scope.row.roleId === 1 ? "管理员" : "用户") }}
+              {{ scope.row.roleId === 0 ? "超级管理员" : (scope.row.roleId === 1 ? "管理员" : "员工") }}
             </el-tag>
           </template>
         </el-table-column>

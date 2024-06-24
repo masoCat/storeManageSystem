@@ -34,7 +34,7 @@
         </template>
         <el-tag
             :type="(user.roleId === 0 ? 'danger' : (user.roleId === 1 ? 'primary' : 'success'))"
-            disable-transitions>{{ user.roleId === 0 ? "超级管理员" : (user.roleId === 1 ? "管理员" : "用户") }}
+            disable-transitions>{{ user.roleId === 0 ? "超级管理员" : (user.roleId === 1 ? "管理员" : "员工") }}
         </el-tag>
 
       </el-descriptions-item>

@@ -19,8 +19,7 @@
     <div>
       <el-table :data="tableData"
                 :header-cell-style="{background: '#8b8888',color:'#ffffff'}"
-                border
-      >
+                border>
         <el-table-column prop="id" label="ID" width="180%">
         </el-table-column>
         <el-table-column prop="name" label="仓库名" width="180%">
