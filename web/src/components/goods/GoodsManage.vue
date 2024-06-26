@@ -42,8 +42,6 @@
         </el-table-column>
         <el-table-column prop="goodstype" label="分类" :formatter="formatGoodsType">
         </el-table-column>
-        <el-table-column prop="count" label="数量">
-        </el-table-column>
         <el-table-column prop="remark" label="备注">
         </el-table-column>
         <el-table-column prop="operate" label="操作" width="180%">
@@ -107,11 +105,6 @@
             </el-select>
           </el-col>
         </el-form-item>
-        <el-form-item label="数量" prop="count">
-          <el-col :span="20">
-            <el-input v-model="form.count"></el-input>
-          </el-col>
-        </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-col :span="20">
             <el-input type="textarea" v-model="form.remark"></el-input>
@@ -145,16 +138,7 @@ export default {
         }
       })
     };
-    // 检验物品数量
-    let checkCount = (rule, value, callback) => {
-      if (value > 9999) {
-        callback(new Error('数量输入过大'));
-      } else {
-        callback();
-      }
-    }
     return {
-      user: JSON.parse(sessionStorage.getItem("CurUser")),
       tableData: [], // 表格主体内容
       pageSize: 5, // 一页显示条目
       pageNum: 1, // 当前页数
@@ -174,7 +158,7 @@ export default {
         name: null,
         storage: null,
         goodstype: null,
-        count: null,
+        count: 0,
         remark: null
       },
       rules: { // 检验
@@ -187,11 +171,6 @@ export default {
         ],
         goodstype: [
           {required: true, message: "请选择分类", trigger: 'blur'},
-        ],
-        count: [
-          {required: true, message: '请输入数量', trigger: 'blur'},
-          {pattern: /^([1-9][0-9]*){1,4}$/, message: '数量必须为正整数字', trigger: 'blur'},
-          {validator: checkCount, trigger: 'blur'}
         ]
       }
     }
