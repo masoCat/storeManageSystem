@@ -15,6 +15,12 @@ const routes = [
                 name: 'HomePage',
                 meta: {title: '首页'},
                 component: () => import('../components/HomePage')
+            },
+            {
+                path: '/Info',
+                name: 'info',
+                meta: {title: '通知'},
+                component: () => import('../components/info/InfoManage')
             }
         ]
     }

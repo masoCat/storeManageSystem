@@ -8,8 +8,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.common.QueryPageParam;
 import com.example.common.Result;
 import com.example.entity.Goods;
+import com.example.entity.Info;
 import com.example.entity.Record;
 import com.example.service.IGoodsService;
+import com.example.service.IInfoService;
 import com.example.service.IRecordService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -35,6 +38,8 @@ public class RecordController {
     IRecordService recordService;
     @Resource
     IGoodsService goodsService;
+    @Resource
+    IInfoService iInfoService;
 
     //新增
     @PostMapping("/save")
@@ -52,6 +57,22 @@ public class RecordController {
         int newnum = goods.getCount() + num;
         goods.setCount(newnum);
         goodsService.updateById(goods);
+
+        // 库存数量不足发送通知预警
+        List list = iInfoService.lambdaQuery().eq(Info::getGoods, record.getGoods()).list();
+
+        if (goods.getCount() < 50 && list.size() == 0) {
+            Info info = new Info();
+            info.setInfo("货物：" + goods.getName() + "    库存数量不足50");
+            info.setType(0);
+            info.setGoods(record.getGoods());
+            iInfoService.save(info);
+        }
+        // 库存足够则删除通知
+        if (goods.getCount() >= 50 && list.size() > 0) {
+            Info info = (Info) list.get(0);
+            iInfoService.removeById(info.getId());
+        }
 
         return recordService.save(record) ? Result.success() : Result.fail();
     }
