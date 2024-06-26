@@ -160,9 +160,6 @@ export default {
         action: null,
       },
       rulesInOut: { // 出入库表单校验
-        username: [
-          {required: true, message: "请选择出入库申请人", trigger: 'blur'},
-        ],
         count: [
           {required: true, message: '请输入数量', trigger: 'blur'},
           {pattern: /^([1-9][0-9]*){1,4}$/, message: '数量必须为正整数字', trigger: 'blur'},
