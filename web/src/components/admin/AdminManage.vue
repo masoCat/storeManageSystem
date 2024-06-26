@@ -105,7 +105,7 @@
             <el-input v-model="form.age"></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item label="性别">
+        <el-form-item label="性别" prop="sex">
           <el-radio-group v-model="form.sex">
             <el-radio label="1">男</el-radio>
             <el-radio label="0">女</el-radio>
@@ -158,7 +158,7 @@ export default {
       pageTotal: 0, // 总条目
       name: '', // 搜索时用到的姓名
       sex: '', // 搜索时用到的性别
-      sexs: [{ // 模态框中选择的性别
+      sexs: [{ // 搜索时选择的性别
         value: '1',
         label: '男'
       }, {
