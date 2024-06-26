@@ -132,7 +132,7 @@ export default {
   data() {
     //检验年龄大小
     let checkAge = (rule, value, callback) => {
-      if (value > 150) {
+      if (value > 200) {
         callback(new Error("年龄过大"));
       } else {
         callback();
@@ -144,7 +144,7 @@ export default {
         return callback();
       }
       this.$axios.get("user/findByNo?no=" + this.form.no).then(res => res.data).then(res => {
-        if (res.code != 200) {
+        if (res.code !== 200) {
           callback()
         } else {
           callback(new Error('账号已经存在'));
