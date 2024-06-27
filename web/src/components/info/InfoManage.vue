@@ -26,9 +26,9 @@
       <el-table :data="tableData"
                 :header-cell-style="{background: '#8b8888',color:'#ffffff'}"
                 border>
-        <el-table-column prop="id" label="ID" width="100%">
+        <el-table-column prop="id" label="ID" width="150%">
         </el-table-column>
-        <el-table-column prop="type" label="通知类型" width="100%">
+        <el-table-column prop="type" label="通知类型" width="150%">
           <template slot-scope="scope">
             <el-tag :type="(scope.row.type === 1 ? 'primary' : 'danger')"
                     disable-transitions>{{ scope.row.type === 1 ? "出入库申请" : "库存预警" }}
@@ -38,7 +38,7 @@
 
         <el-table-column prop="info" label="通知内容">
         </el-table-column>
-        <el-table-column prop="operate" label="操作" width="100%">
+        <el-table-column prop="operate" label="操作" width="150%" v-if="user.roleId!==2">
           <template slot-scope="scope">
             <el-popconfirm title="确定删除？" @confirm="del(scope.row.id)" style="margin-left: 20px">
               <el-button slot="reference" size="small" type="danger">删除</el-button>
@@ -71,6 +71,8 @@ export default {
   name: "InfoManage",
   data() {
     return {
+      user:{},
+
       tableData: [], // 表格主体内容
       pageSize: 5, // 一页显示条目
       pageNum: 1, // 当前页数
@@ -89,6 +91,8 @@ export default {
   },
   methods: {
     loadPost() { // 从后端获取数据
+      this.user = JSON.parse(sessionStorage.getItem('CurUser'))
+      console.log(this.user.roleId)
       this.$axios.post("info/listPage", {
         pageSize: this.pageSize,
         pageNum: this.pageNum,
@@ -127,12 +131,12 @@ export default {
         }
       })
     },
-    handleSizeChange(val) { //更改每页条数
+    handleSizeChange(val) { // 更改每页条数
       this.pageNum = 1
       this.pageSize = val
       this.loadPost()
     },
-    handleCurrentChange(val) { //更改当前页数
+    handleCurrentChange(val) { // 更改当前页数
       this.pageNum = val
       this.loadPost()
     }
