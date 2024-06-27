@@ -23,9 +23,10 @@ public class StorageServiceImpl extends ServiceImpl<StorageMapper, Storage> impl
 
     @Resource
     private StorageMapper storageMapper;
+
     @Override
     public IPage pageCC(IPage<Storage> page, Wrapper wrapper) {
-        return storageMapper.pageCC(page,wrapper);
+        return storageMapper.pageCC(page, wrapper);
     }
 
 }

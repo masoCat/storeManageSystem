@@ -23,9 +23,10 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
 
     @Resource
     private RecordMapper recordMapper;
+
     @Override
     public IPage pageCC(IPage<Record> page, Wrapper wrapper) {
-        return recordMapper.pageCC(page,wrapper);
+        return recordMapper.pageCC(page, wrapper);
     }
 
 }

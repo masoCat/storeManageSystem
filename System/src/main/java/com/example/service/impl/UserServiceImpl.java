@@ -30,6 +30,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public IPage pageCC(IPage<User> page, Wrapper wrapper) {
-        return userMapper.pageCC(page,wrapper);
+        return userMapper.pageCC(page, wrapper);
     }
 }

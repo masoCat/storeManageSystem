@@ -63,8 +63,10 @@ public class GoodsController {
 
         LambdaQueryWrapper<Goods> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (StringUtils.isNotBlank(name) && !"null".equals(name)) lambdaQueryWrapper.like(Goods::getName, name);
-        if (StringUtils.isNotBlank(storage) && !"null".equals(storage)) lambdaQueryWrapper.eq(Goods::getStorage, storage);
-        if (StringUtils.isNotBlank(goodstype) && !"null".equals(goodstype)) lambdaQueryWrapper.eq(Goods::getGoodstype, goodstype);
+        if (StringUtils.isNotBlank(storage) && !"null".equals(storage))
+            lambdaQueryWrapper.eq(Goods::getStorage, storage);
+        if (StringUtils.isNotBlank(goodstype) && !"null".equals(goodstype))
+            lambdaQueryWrapper.eq(Goods::getGoodstype, goodstype);
 
         IPage result = goodsService.pageCC(page, lambdaQueryWrapper);
 
