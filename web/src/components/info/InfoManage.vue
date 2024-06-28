@@ -4,7 +4,7 @@
     <div style="margin-bottom: 5px">
       <el-input
           v-model="info"
-          placeholder="请输入通知内容"
+          placeholder="请输入货物名称"
           suffix-icon="el-icon-search"
           style="width: 200px;"
           @keyup.enter.native="loadPost">
@@ -35,8 +35,10 @@
             </el-tag>
           </template>
         </el-table-column>
-
         <el-table-column prop="info" label="通知内容">
+          <template slot-scope="scope">
+            货物：{{ scope.row.info }} 数量不足50
+          </template>
         </el-table-column>
         <el-table-column prop="operate" label="操作" width="150%" v-if="user.roleId!==2">
           <template slot-scope="scope">
@@ -71,7 +73,7 @@ export default {
   name: "InfoManage",
   data() {
     return {
-      user:{},
+      user: {}, // 用户
 
       tableData: [], // 表格主体内容
       pageSize: 5, // 一页显示条目
@@ -92,7 +94,6 @@ export default {
   methods: {
     loadPost() { // 从后端获取数据
       this.user = JSON.parse(sessionStorage.getItem('CurUser'))
-      console.log(this.user.roleId)
       this.$axios.post("info/listPage", {
         pageSize: this.pageSize,
         pageNum: this.pageNum,
@@ -102,7 +103,7 @@ export default {
         }
       }).then(res => res.data).then(res => {
         if (res.code === 200) {
-          this.tableData = res.data;
+          this.tableData = res.data
           this.pageTotal = res.total
         } else {
           alert('获取数据失败')

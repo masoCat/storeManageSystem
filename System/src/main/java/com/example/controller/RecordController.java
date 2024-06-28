@@ -63,7 +63,7 @@ public class RecordController {
 
         if (goods.getCount() < 50 && list.size() == 0) {
             Info info = new Info();
-            info.setInfo("货物：" + goods.getName() + "    库存数量不足50");
+            info.setInfo(goods.getName());
             info.setType(0);
             info.setGoods(record.getGoods());
             iInfoService.save(info);
