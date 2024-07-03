@@ -58,18 +58,19 @@ public class RecordController {
         goods.setCount(newnum);
         goodsService.updateById(goods);
 
-        // 库存数量不足发送通知预警
-        List list = iInfoService.lambdaQuery().eq(Info::getGoods, record.getGoods()).list();
+        // 查询是否存在对应物品的预警通知
+        List list = iInfoService.lambdaQuery().eq(Info::getGoods, goods.getId()).list();
 
+        // 如果库存不足且没有通知则发送预警
         if (goods.getCount() < 50 && list.size() == 0) {
             Info info = new Info();
             info.setInfo(goods.getName());
             info.setType(0);
             info.setGoods(record.getGoods());
             iInfoService.save(info);
-        }
-        // 库存足够则删除通知
-        if (goods.getCount() >= 50 && list.size() > 0) {
+
+        // 如果库存足够且存在预警通知则删除
+        } else if (goods.getCount() >= 50 && list.size() > 0) {
             Info info = (Info) list.get(0);
             iInfoService.removeById(info.getId());
         }
