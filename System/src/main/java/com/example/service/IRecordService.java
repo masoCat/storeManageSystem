@@ -15,4 +15,5 @@ import com.example.entity.Record;
  */
 public interface IRecordService extends IService<Record> {
     IPage pageCC(IPage<Record> page, Wrapper wrapper);
+    int removeByGoods(int goods);
 }

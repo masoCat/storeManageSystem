@@ -17,4 +17,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface RecordMapper extends BaseMapper<Record> {
     IPage pageCC(IPage<Record> page, @Param(Constants.WRAPPER) Wrapper wrapper);
+
+    int removeByGoods(int goods);
 }

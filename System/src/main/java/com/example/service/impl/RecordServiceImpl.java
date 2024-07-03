@@ -29,4 +29,9 @@ public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> impleme
         return recordMapper.pageCC(page, wrapper);
     }
 
+    @Override
+    public int removeByGoods(int goods) {
+        return recordMapper.removeByGoods(goods);
+    }
+
 }

@@ -8,7 +8,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.common.QueryPageParam;
 import com.example.common.Result;
 import com.example.entity.Goods;
+import com.example.entity.Info;
+import com.example.entity.Record;
 import com.example.service.IGoodsService;
+import com.example.service.IInfoService;
+import com.example.service.IRecordService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,6 +34,12 @@ public class GoodsController {
     @Resource
     IGoodsService goodsService;
 
+    @Resource
+    IInfoService iInfoService;
+
+    @Resource
+    IRecordService iRecordService;
+
     // 根据物品名查询
     @GetMapping("/findByName")
     public Result findByName(@RequestParam String name) {
@@ -46,6 +56,16 @@ public class GoodsController {
     //删除
     @GetMapping("/delete")
     public Result delete(Integer id) {
+
+        // 删除对应物品的通知Info
+        List listInfo = iInfoService.lambdaQuery().eq(Info::getGoods, id).list();
+        Info info = (Info) listInfo.get(0);
+        iInfoService.removeById(info.getId());
+
+        // 删除对应物品的记录Record
+        List listRecord = iRecordService.lambdaQuery().eq(Record::getGoods, id).list();
+        if (listRecord.size() > 0) iRecordService.removeByGoods(id);
+
         return goodsService.removeById(id) ? Result.success() : Result.fail();
     }
 

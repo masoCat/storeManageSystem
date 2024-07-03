@@ -15,4 +15,9 @@
             ${ew.customSqlSegment}
         ORDER BY r.id
     </select>
+    <delete id="removeByGoods">
+        delete
+        from record
+        where goods = ${goods}
+    </delete>
 </mapper>
