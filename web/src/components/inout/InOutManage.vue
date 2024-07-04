@@ -124,11 +124,12 @@ export default {
   data() {
     // 检验物品数量
     let checkCount = (rule, value, callback) => {
-      if (value > 9999) {
-        callback(new Error('数量输入过大'));
-      } else {
-        callback();
-      }
+      if (value > 9999) callback(new Error('数量输入过大'));
+
+      // 出库时库存数量不足
+      else if (this.formInOut.action === 2 && value > this.currentRow.count) callback(new Error('库存不足'));
+
+      else callback()
     }
     return {
       user: JSON.parse(sessionStorage.getItem("CurUser")),
