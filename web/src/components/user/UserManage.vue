@@ -250,7 +250,7 @@ export default {
         this.form.roleId = row.roleId + "" // 权限
       })
     },
-    del(id) { // 打开删除模态框
+    del(id) { // 删除
       this.$axios.get("user/delete?id=" + id).then(res => res.data).then(res => {
         if (res.code === 200) {
           this.$message({
